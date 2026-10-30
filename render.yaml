@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: oj-backend
+    runtime: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        scope: shared
+      - key: JWT_SECRET
+        scope: shared
+      - key: CLIENT_URL
+        value: https://<your-frontend-domain>.vercel.app
+      - key: SMTP_HOST
+        scope: shared
+      - key: SMTP_PORT
+        scope: shared
+      - key: SMTP_USER
+        scope: shared
+      - key: SMTP_PASSWORD
+        scope: shared
+      - key: SMTP_FROM
+        scope: shared
+      - key: LOG_LEVEL
+        value: info
+
+  - type: pserv
+    name: oj-mongodb
+    runtime: docker
+    dockerfilePath: ./Dockerfile.mongo
+    plan: free
+    envVars:
+      - key: MONGO_INITDB_ROOT_USERNAME
+        scope: shared
+      - key: MONGO_INITDB_ROOT_PASSWORD
+        scope: shared
+      - key: MONGO_INITDB_DATABASE
+        value: oj_db
